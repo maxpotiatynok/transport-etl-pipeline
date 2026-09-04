@@ -1,0 +1,5 @@
+urllib3
+pandas
+requests
+python-dotenv
+logging
