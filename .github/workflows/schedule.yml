@@ -31,5 +31,6 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git add tfl.db
           git commit -m "Update TfL table"
+          git pull --rebase origin main
           git push 
         
