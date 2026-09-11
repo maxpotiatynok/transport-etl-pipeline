@@ -6,6 +6,8 @@ on:
 jobs:
   run-script:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -26,7 +28,7 @@ jobs:
 
       - name: Commit changes
         run: |
-          git config --global user.name “github-actions[bot]”
+          git config --global user.name "github-actions[bot]"
           git add tfl.db
           git commit -m "Update TfL table"
           git push 
