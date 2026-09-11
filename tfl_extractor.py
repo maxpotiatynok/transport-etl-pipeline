@@ -8,13 +8,12 @@ import sqlite3
 BASE_URL = "https://api.tfl.gov.uk"
 API_KEY = os.environ.get("API_KEY")
 tfl_client = apiclient.APIClient(BASE_URL, API_KEY)
-db_path = Path("~/PycharmProjects/transport-etl-pipeline/tfl.db")
 
 def create_table():
     """
     Establishes a connection to the TfL database and creates a table using the schema file
     """
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect("tfl.db")
     tfl_cursor = conn.cursor()
     schema = Path("schema.sql").read_text()
     tfl_cursor.execute(schema)
@@ -47,7 +46,7 @@ def get_lines_disruptions():
                         disruption_todate = validity_period["toDate"] #End of the planned disruption
                     disruption_closure_text = line_status["disruption"]["closureText"]
 
-                    disruption_conn = sqlite3.connect(db_path)
+                    disruption_conn = sqlite3.connect("tfl.db")
                     d_cursor = disruption_conn.cursor()
                     d_cursor.execute(
                     '''
