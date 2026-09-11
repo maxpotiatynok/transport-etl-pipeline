@@ -23,3 +23,11 @@ jobs:
 
       - name: Run script
         run: python tfl_extractor.py
+
+      - name: Commit changes
+        run: |
+          git config --global user.name “github-actions[bot]”
+          git add tfl.db
+          git commit -m "Update TfL table"
+          git push 
+        
