@@ -82,18 +82,20 @@ class APIClient:
             response.raise_for_status()
             if 'application/json' not in response.headers.get('Content-Type', ''):
                 self._logger.error("Response is not JSON")
+                raise
                 raise ValueError(f"Non-JSON response from {endpoint}", response)
             return response.json()
         except requests.exceptions.InvalidURL:
-            self._logger.error("Invalid URL", endpoint)
+            self._logger.error(f"Invalid URL for {endpoint}")
+            raise
         except requests.exceptions.Timeout:
-            self._logger.error(f"Request timed out")
+            self._logger.error(f"Request timed out for {endpoint}")
             raise
         except requests.exceptions.ConnectionError:
-            self._logger.error("Connection failed - check URL and internet connection", endpoint)
+            self._logger.error(f"Connection failed - check URL and internet connection for {endpoint}")
             raise
         except requests.exceptions.JSONDecodeError:
-            self._logger.error("Failed to convert to JSON")
+            self._logger.error(f"Failed to convert to JSON for {endpoint}")
         except requests.exceptions.HTTPError as e:
             status = e.response.status_code
             error_messages = {
@@ -103,10 +105,10 @@ class APIClient:
                 404: "Invalid URL",
                 429: "Rate limit reached",
             }
-            self._logger.error(error_messages.get(status, f"Server error: {status}"), endpoint)
+            self._logger.error(error_messages.get(status, f"Server error: {status} for {endpoint}"))
             raise
-        except requests.exceptions.RequestException as e:
-            self._logger.error(f"Unexpected error: {e}", endpoint)
+        except requests.exceptions.RequestException:
+            self._logger.error(f"Unexpected error: {endpoint}")
             raise
 
 
