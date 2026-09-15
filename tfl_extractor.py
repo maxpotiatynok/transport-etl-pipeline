@@ -1,12 +1,16 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from pathlib import Path
+from dotenv import load_dotenv
 import apiclient
 import os
 import sqlite3
 
 BASE_URL = "https://api.tfl.gov.uk"
-API_KEY = os.environ.get("API_KEY")
+load_dotenv()
+API_KEY = os.environ.get("TFL_API_KEY")
+if not API_KEY:
+    raise RuntimeError("TFL_API_KEY not set")
 tfl_client = apiclient.APIClient(BASE_URL, API_KEY)
 
 def create_table():
