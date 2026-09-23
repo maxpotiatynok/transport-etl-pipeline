@@ -1,13 +1,11 @@
 CREATE TABLE IF NOT EXISTS RawDisruptions (
-        Line TEXT NOT NULL,
-        LineName TEXT,
-        StatusSeverity INT NOT NULL,
-        SeverityDescription TEXT,
-        Reason TEXT,
-        FromDate TEXT,
-        IsPlanned INT,
-        ToDate TEXT,
-        DisruptionClosureText TEXT,
-        FetchedAt TEXT,
-        UNIQUE (Line, FromDate, DisruptionClosureText)
-    );
+    LineID TEXT NOT NULL,
+    LineName TEXT,
+    ServiceQuality INTEGER NOT NULL,
+    ServiceQualityDescription TEXT,
+    Reason TEXT,
+    FromDate TEXT,
+    ToDate TEXT,
+    FetchedAt TEXT NOT NULL,
+    UNIQUE (LineID, FetchedAt)
+);

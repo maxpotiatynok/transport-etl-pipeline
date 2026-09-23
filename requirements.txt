@@ -1,5 +1,5 @@
 urllib3
 pandas
 requests
-python-dotenv
+dotenv
 urllib3
