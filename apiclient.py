@@ -23,6 +23,7 @@ def build_session():
         backoff_factor=1,                           # urllib3 waits backoff_factor * 2**(n-1) seconds, so: 0s, 2s, 4s.
         status_forcelist=(429, 500, 502, 503, 504), # Retry on these calls
         respect_retry_after_header=True,
+        raise_on_status=False,
     )
     session = requests.Session()
     session.mount("https://", HTTPAdapter(max_retries=retry))
@@ -81,9 +82,8 @@ class APIClient:
             )
             response.raise_for_status()
             if 'application/json' not in response.headers.get('Content-Type', ''):
-                self._logger.error("Response is not JSON")
-                raise
-                raise ValueError(f"Non-JSON response from {endpoint}", response)
+                self._logger.error(f"Non-JSON response for {endpoint}")
+                raise ValueError(f"Non-JSON response from {endpoint}")
             return response.json()
         except requests.exceptions.InvalidURL:
             self._logger.error(f"Invalid URL for {endpoint}")
@@ -96,16 +96,17 @@ class APIClient:
             raise
         except requests.exceptions.JSONDecodeError:
             self._logger.error(f"Failed to convert to JSON for {endpoint}")
+            raise
         except requests.exceptions.HTTPError as e:
             status = e.response.status_code
             error_messages = {
                 400: "Invalid Request",
                 401: "Unauthorised API key request",
-                403: "Access denied",
+                403: "Access Denied",
                 404: "Invalid URL",
-                429: "Rate limit reached",
+                429: "Rate Limit Reached",
             }
-            self._logger.error(error_messages.get(status, f"Server error: {status} for {endpoint}"))
+            self._logger.error(f"HTTP error({status}): {error_messages.get(status, "Server Error")} for {endpoint}")
             raise
         except requests.exceptions.RequestException:
             self._logger.error(f"Unexpected error: {endpoint}")
