@@ -67,7 +67,6 @@ class APIClient:
             ValueError: The response is not JSON
             requests.exceptions.Timeout: Connect request timed out
             requests.exceptions.HTTPError: If the HTTP request failed
-            requests.exceptions.RequestException: Unknown error:
             requests.exceptions.ConnectionError: Connection error
             requests.exceptions.InvalidURL: Invalid URL
             requests.exceptions.JSONDecodeError: Failed to convert to JSON

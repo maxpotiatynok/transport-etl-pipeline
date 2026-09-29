@@ -3,8 +3,7 @@ Pulls current status for all tube lines and inserts one row per line
 per poll into RawDisruptions table. When a line has multiple simultaneous
 statuses, only the most severe is recorded.
 """
-from datetime import datetime
-from zoneinfo import ZoneInfo
+from datetime import datetime, timezone
 from pathlib import Path
 from dotenv import load_dotenv
 import apiclient
@@ -34,7 +33,7 @@ def get_lines_disruptions():
     Requests tube line statuses for each line, normalises into SQl rows and timestamps them
     """
     disruptions_list = tfl_client.fetch("/Line/Mode/tube/Status")
-    current_time = datetime.now(ZoneInfo("Europe/London")).isoformat()
+    current_time = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
     disruption_conn = sqlite3.connect("tfl.db")
     d_cursor = disruption_conn.cursor()

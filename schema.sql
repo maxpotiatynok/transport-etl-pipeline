@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS RawDisruptions (
     Reason TEXT,
     FromDate TEXT,
     ToDate TEXT,
-    FetchedAt TEXT NOT NULL,
-    UNIQUE (LineID, FetchedAt)
+    FetchedAtUTC TEXT NOT NULL,
+    UNIQUE (LineID, FetchedAtUTC)
 );
