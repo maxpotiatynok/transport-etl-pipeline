@@ -66,13 +66,13 @@ def get_lines_disruptions():
 
         d_cursor.execute('''
                          INSERT INTO RawDisruptions(LineID, LineName, ServiceQuality, ServiceQualityDescription,
-                                                    Reason, FromDate, ToDate, FetchedAt)
+                                                    Reason, FromDate, ToDate, FetchedAtUTC)
                          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                          ''', (
                              disruption_line, disruption_name, disruption_severity,
                              disruption_severity_description, disruption_reason,
                              disruption_created, disruption_todate, current_time))
-        disruption_conn.commit()
+    disruption_conn.commit()
     disruption_conn.close()
 
 create_table()
