@@ -2,4 +2,4 @@ urllib3
 pandas
 requests
 dotenv
-urllib3
+streamlit
