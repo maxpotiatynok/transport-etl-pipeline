@@ -23,7 +23,7 @@ def create_table():
     """
     conn = sqlite3.connect("tfl.db")
     tfl_cursor = conn.cursor()
-    schema = Path("schema.sql").read_text()
+    schema = Path("raw_table_schema.sql").read_text()
     tfl_cursor.execute(schema)
     conn.commit()
     conn.close()
