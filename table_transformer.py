@@ -70,5 +70,12 @@ class TableTransformer:
         self._db.commit()
 
 
+if __name__ == "__main__":
+    transformer = TableTransformer()
+    transformer.create_islands_table()
+    transformer.fill_islands_table()
+    transformer._db.close()
+
+
 
 

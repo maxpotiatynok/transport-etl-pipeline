@@ -3,5 +3,6 @@
 .venv
 logs
 tfl.db
-tfl_extractor.sh
-CLAUDE.md
+.claude
+__pycache__/
+.DS_Store
