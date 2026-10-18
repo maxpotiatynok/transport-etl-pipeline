@@ -7,6 +7,8 @@ def tfl_connect():
 class AnalyticsClient:
     # Must match the cron schedule that runs tfl_extractor.sh (every 5 minutes).
     POLL_INTERVAL_SECONDS = 300
+    #Counts two consecutive poll gaps as a no data gap
+    GAPS_THRESHOLD = POLL_INTERVAL_SECONDS * 2.5
 
     def __init__(self, db = None):
         self._db = db if db is not None else tfl_connect()
@@ -47,7 +49,7 @@ class AnalyticsClient:
                         unixepoch('now') / :interval
                             - MIN(unixepoch(FetchedAt)) / :interval + 1 AS expected_slots
                     FROM RawDisruptions
-                    WHERE LineId = :lineId
+                    WHERE LineId = :lineID
                 )
                 SELECT AVG(100.0 * covered_slots / expected_slots) FROM bounds
                 ''',
@@ -79,4 +81,6 @@ class AnalyticsClient:
         if row[0] is None:
             raise ValueError("No polls recorded yet")
         return row[0]
+
+
 
