@@ -71,10 +71,11 @@ class TableTransformer:
 
 
 if __name__ == "__main__":
-    transformer = TableTransformer()
+    tfl = tfl_connect()
+    transformer = TableTransformer(tfl)
     transformer.create_islands_table()
     transformer.fill_islands_table()
-    transformer._db.close()
+    tfl.close()
 
 
 

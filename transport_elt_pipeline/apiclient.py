@@ -12,6 +12,13 @@ import logging
 from requests.adapters import HTTPAdapter
 from urllib3 import Retry
 
+RETRY_HTTP_FORCE_SET = {429, 500, 502, 503, 504}
+RETRY_ATTEMPTS = 3
+RETRY_BACKOFF_FACTOR = 1
+
+FETCH_CONNECT_TIMEOUT = 3
+FETCH_READ_TIMEOUT = 5
+
 def build_session():
     """Build a requests Session with a polite retry policy.
 
@@ -19,9 +26,9 @@ def build_session():
             requests.Session: pooled requests session that retries failed requests with an exponential backoff.
     """
     retry = Retry(
-        total=3,
-        backoff_factor=1,                           # urllib3 waits backoff_factor * 2**(n-1) seconds, so: 0s, 2s, 4s.
-        status_forcelist=(429, 500, 502, 503, 504), # Retry on these calls
+        total=RETRY_ATTEMPTS,
+        backoff_factor=RETRY_BACKOFF_FACTOR,          # urllib3 waits backoff_factor * 2**(n-1) seconds, so: 0s, 2s, 4s.
+        status_forcelist=RETRY_HTTP_FORCE_SET,
         respect_retry_after_header=True,
         raise_on_status=False,
     )
@@ -50,7 +57,7 @@ class APIClient:
     _logger = logging.getLogger(__name__)
     def __init__(self, base_url, app_key, session = None):
         self._base_url = base_url
-        self._app_key = app_key
+        self._app_key = app_key or None
         self._session = build_session() if session is None else session
 
     def fetch(self, endpoint):
@@ -77,7 +84,7 @@ class APIClient:
                 method="GET",
                 url=f"{self._base_url}{endpoint}",
                 params={"app_key": self._app_key},
-                timeout=(3,5) ##Connect, Read
+                timeout=(FETCH_CONNECT_TIMEOUT, FETCH_READ_TIMEOUT)
             )
             response.raise_for_status()
             if 'application/json' not in response.headers.get('Content-Type', ''):
