@@ -1,6 +1,6 @@
 import sqlite3
 from pathlib import Path
-from analytics import AnalyticsClient
+from transport_elt_pipeline.analytics import AnalyticsClient
 
 
 def tfl_connect():
@@ -15,7 +15,7 @@ class TableTransformer:
 
     def create_islands_table(self):
         cursor = self._db.cursor()
-        schema = Path("islands_table_schema.sql").read_text()
+        schema = Path("../schemas/islands_table_schema.sql").read_text()
         cursor.execute(schema)
         self._db.commit()
 

@@ -6,7 +6,7 @@ statuses, only the most severe is recorded.
 from datetime import datetime, timezone
 from pathlib import Path
 from dotenv import load_dotenv
-import apiclient
+from transport_elt_pipeline import apiclient
 import os
 import sqlite3
 
@@ -23,7 +23,7 @@ def create_table():
     """
     conn = sqlite3.connect("tfl.db")
     tfl_cursor = conn.cursor()
-    schema = Path("raw_table_schema.sql").read_text()
+    schema = Path("../schemas/raw_table_schema.sql").read_text()
     tfl_cursor.execute(schema)
     conn.commit()
     conn.close()

@@ -2,7 +2,7 @@
 .idea
 .venv
 logs
-tfl.db
+transport_elt_pipeline/tfl.db
 .claude
 __pycache__/
 .DS_Store
